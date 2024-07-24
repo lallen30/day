@@ -84,8 +84,10 @@ def chat():
     question = data.get('question')
     if not question:
         return jsonify({'error': 'No question provided'}), 400
-    if not perplexity_api_key or not openai_api_key:
-        return jsonify({'error': 'API clients are not initialized'}), 500
+    if not perplexity_api_key:
+        return jsonify({'error': 'Perplexity not initialized'}), 500
+    if not openai_api_key:
+        return jsonify({'error': 'Openai not initialized'}), 500
     if check_question_stock_market(question):
         return query_perplexity_model(question)
     return jsonify({'message': 'Please keep questions related to the stock market'}), 400
@@ -135,7 +137,7 @@ def query_perplexity_model(question):
     ]
 
         response = pplxClient.chat.completions.create(
-            model="pplx-70b-online",
+            model="llama-3-sonar-small-32k-online",
             messages=messages
         )
 
